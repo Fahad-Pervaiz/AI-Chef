@@ -1,0 +1,23 @@
+{
+  "name": "Scrim-s06j1gu",
+  "description": "https://scrimba.com/fullstack-path-c0fullstack/~04x6",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "server": "node server.js",
+    "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.27.3",
+    "@huggingface/inference": "2.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^9.0.1",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "*"
+  }
+}
