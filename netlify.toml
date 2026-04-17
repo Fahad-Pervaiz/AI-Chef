@@ -8,12 +8,6 @@
   port = 5173
 
 [[redirects]]
-  from = "/.netlify/functions/:name"
-  to = "/.netlify/functions/:name"
-  status = 200
-  force = false
-
-[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
