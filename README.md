@@ -59,6 +59,13 @@ npm run dev
 ```
 The application will start at `http://localhost:5173`
 
+### Local Development with Serverless Functions
+
+```bash
+npm run dev:netlify
+```
+This runs the dev server with Netlify functions enabled for testing the full backend integration.
+
 ### Build for Production
 
 ```bash
@@ -94,25 +101,28 @@ This runs both the Vite dev server and the Node backend concurrently.
 
 ## 🔒 Security & Deployment Notes
 
-⚠️ **Important**: API keys should NEVER be exposed in client-side code for production deployments.
+⚠️ **Important**: This project now uses **Netlify Serverless Functions** to keep API keys private and secure.
 
-### For Production Deployment:
+### Architecture:
+```
+Frontend (React) → Netlify Function → HuggingFace API
+      (Public)        (Private)        (Private)
+```
 
-1. **Create a Backend Server**: Build a backend (Node.js, Python, etc.) to handle API calls
-2. **Environment Variables**: Store API keys securely on your backend server
-3. **API Proxy**: Route all AI requests through your backend to keep keys private
-4. **Example Backend Structure**:
-   ```
-   - Backend server receives ingredient requests
-   - Backend makes API calls to Anthropic/HuggingFace using stored keys
-   - Backend returns recipes to frontend
-   ```
+### Why This Approach:
+- ✅ API tokens never exposed to client
+- ✅ CORS issues resolved through backend proxy
+- ✅ Secure authentication
+- ✅ Scales automatically with Netlify
 
-### Deployment Platforms:
-- Vercel (with serverless functions for backend)
-- Netlify (with serverless functions)
-- Heroku
-- Your own VPS/Docker container
+### Deployment Instructions:
+
+👉 **See [DEPLOYMENT.md](DEPLOYMENT.md) for complete setup guide**
+
+Quick steps:
+1. Add `VITE_HF_ACCESS_TOKEN` to Netlify environment variables
+2. Redeploy your site
+3. Done! Your app now works securely
 
 ## 📁 Project Structure
 

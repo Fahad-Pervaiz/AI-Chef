@@ -1,41 +1,34 @@
-import Anthropic from "@anthropic-ai/sdk"
-import { HfInference } from '@huggingface/inference'
-
-const SYSTEM_PROMPT = `
-You are an assistant that receives a list of ingredients that a user has and suggests a recipe they could make with some or all of those ingredients. You don't need to use every ingredient they mention in your recipe. The recipe can include additional ingredients they didn't mention, but try not to include too many extra ingredients. Format your response in markdown to make it easier to render to a web page
-`
-
-// 🚨👉 ALERT: Read message below! You've been warned! 👈🚨
-// If you're following along on your local machine instead of
-// here on Scrimba, make sure you don't commit your API keys
-// to any repositories and don't deploy your project anywhere
-// live online. Otherwise, anyone could inspect your source
-// and find your API keys/tokens. If you want to deploy
-// this project, you'll need to create a backend of some kind,
-// either your own or using some serverless architecture where
-// your API calls can be made. Doing so will keep your
-// API keys private.
-
-
-console.log("HF Token loaded:", import.meta.env.VITE_HF_ACCESS_TOKEN ? "✓ Token exists" : "✗ Token missing")
-const hf = new HfInference(import.meta.env.VITE_HF_ACCESS_TOKEN)
+// API is now called through Netlify serverless function for security
+// This keeps API keys private on the backend
 
 export async function getRecipeFromMistral(ingredientsArr) {
     const ingredientsString = ingredientsArr.join(", ")
     console.log("getRecipeFromMistral called with:", ingredientsString)
     try {
-        console.log("Calling Mistral API...")
-        const response = await hf.chatCompletion({
-            model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
-            messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                { role: "user", content: `I have ${ingredientsString}. Please give me a recipe you'd recommend I make!` },
-            ],
-            max_tokens: 1024,
+        console.log("Calling serverless function...")
+        
+        // Determine the API endpoint based on environment
+        const apiEndpoint = import.meta.env.PROD 
+            ? "/.netlify/functions/getRecipe"
+            : "http://localhost:8888/.netlify/functions/getRecipe"
+        
+        const response = await fetch(apiEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ingredients: ingredientsArr }),
         })
-        console.log("Mistral API response received:", response)
-        return response.choices[0].message.content
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`)
+        }
+
+        const data = await response.json()
+        console.log("Recipe received:", data.recipe)
+        return data.recipe
     } catch (err) {
         console.error("Error in getRecipeFromMistral:", err)
+        throw err
     }
 }

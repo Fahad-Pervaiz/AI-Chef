@@ -4,6 +4,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "dev:netlify": "netlify dev",
     "server": "node server.js",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "vite build",
@@ -18,6 +19,7 @@
     "vite": "latest"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "*"
+    "@vitejs/plugin-react": "*",
+    "netlify-cli": "^17.0.0"
   }
 }
