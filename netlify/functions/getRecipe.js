@@ -23,12 +23,15 @@ export default async (req, context) => {
     const ingredientsString = ingredients.join(', ');
     console.log('Calling Mistral API with ingredients:', ingredientsString);
 
-    // Use environment variable from Netlify
-    const hfToken = process.env.VITE_HF_ACCESS_TOKEN;
+    // Use environment variable from Netlify - check both possible names
+    const hfToken = process.env.VITE_HF_ACCESS_TOKEN || process.env.HF_ACCESS_TOKEN;
+    console.log('Token check - exists:', !!hfToken, 'length:', hfToken?.length);
+    
     if (!hfToken) {
       console.error('HuggingFace token not found in environment variables');
+      console.error('Available env vars:', Object.keys(process.env).filter(k => k.includes('HF') || k.includes('VITE')));
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
+        JSON.stringify({ error: 'Server configuration error: Missing API token' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -58,6 +61,7 @@ export default async (req, context) => {
     });
   } catch (error) {
     console.error('Error in getRecipe function:', error);
+    console.error('Error details:', error.message, error.stack);
     return new Response(
       JSON.stringify({ error: 'Failed to generate recipe', details: error.message }),
       {
