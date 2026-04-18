@@ -101,11 +101,11 @@ This runs both the Vite dev server and the Node backend concurrently.
 
 ## 🔒 Security & Deployment Notes
 
-⚠️ **Important**: This project now uses **Netlify Serverless Functions** to keep API keys private and secure.
+⚠️ **Important**: This project now uses **Cloudflare Workers** to keep API keys private and secure.
 
 ### Architecture:
 ```
-Frontend (React) → Netlify Function → HuggingFace API
+Frontend (React) → Cloudflare Worker → HuggingFace API
       (Public)        (Private)        (Private)
 ```
 
@@ -113,35 +113,37 @@ Frontend (React) → Netlify Function → HuggingFace API
 - ✅ API tokens never exposed to client
 - ✅ CORS issues resolved through backend proxy
 - ✅ Secure authentication
-- ✅ Scales automatically with Netlify
+- ✅ Scales automatically with Cloudflare
 
 ### Deployment Instructions:
 
 👉 **See [DEPLOYMENT.md](DEPLOYMENT.md) for complete setup guide**
 
 Quick steps:
-1. Add `VITE_HF_ACCESS_TOKEN` to Netlify environment variables
-2. Redeploy your site
+1. Add `VITE_HF_ACCESS_TOKEN` to Cloudflare environment variables
+2. Deploy to Cloudflare Pages
 3. Done! Your app now works securely
 
 ## 📁 Project Structure
 
 ```
 AI Chef-bk/
-├── ai.js                 # AI API integration functions
-├── App.jsx              # Main app component
-├── Header.jsx           # Header component
-├── Main.jsx             # Main content component
-├── index.jsx            # React entry point
-├── index.html           # HTML template
-├── index.css            # Global styles
-├── vite.config.js       # Vite configuration
-├── package.json         # Dependencies & scripts
+├── functions/
+│   └── getRecipe.js        # Cloudflare Worker function for recipe generation
+├── ai.js                   # AI API integration functions
+├── App.jsx                # Main app component
+├── Header.jsx             # Header component
+├── Main.jsx               # Main content component
+├── index.jsx              # React entry point
+├── index.html             # HTML template
+├── index.css              # Global styles
+├── vite.config.js         # Vite configuration
+├── package.json           # Dependencies & scripts
 ├── components/
-│   ├── ClaudeRecipe.jsx # Claude recipe component
+│   ├── ClaudeRecipe.jsx   # Claude recipe component
 │   └── IngredientsList.jsx # Ingredients list component
-├── images/              # Image assets
-└── public/              # Static files
+├── images/                # Image assets
+└── public/                # Static files
 ```
 
 ## 🤝 Contributing

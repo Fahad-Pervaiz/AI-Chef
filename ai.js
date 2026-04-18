@@ -1,17 +1,17 @@
-// API is now called through Netlify serverless function for security
+// API is now called through Cloudflare Worker for security
 // This keeps API keys private on the backend
 
 export async function getRecipeFromMistral(ingredientsArr) {
     const ingredientsString = ingredientsArr.join(", ")
     console.log("getRecipeFromMistral called with:", ingredientsString)
     try {
-        console.log("Calling serverless function...")
-        
+        console.log("Calling Cloudflare Worker...")
+
         // Determine the API endpoint based on environment
-        const apiEndpoint = import.meta.env.PROD 
-            ? "/.netlify/functions/getRecipe"
-            : "http://localhost:8888/.netlify/functions/getRecipe"
-        
+        const apiEndpoint = import.meta.env.PROD
+            ? "/functions/getRecipe"
+            : "http://localhost:8788/functions/getRecipe"
+
         const response = await fetch(apiEndpoint, {
             method: "POST",
             headers: {
