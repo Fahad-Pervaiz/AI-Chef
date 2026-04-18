@@ -4,7 +4,6 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "dev:netlify": "netlify dev",
     "server": "node server.js",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "vite build",
